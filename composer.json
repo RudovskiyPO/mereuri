@@ -1,5 +1,6 @@
 {
   "name": "rudovskiypo/mereuri",
+  "version": "1.1",
   "type": "library",
   "description": "Lightweight PHP URI worker",
   "keywords": ["uri", "mereuri", "parser"],
