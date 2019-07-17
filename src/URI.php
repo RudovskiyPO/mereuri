@@ -11,14 +11,10 @@ class URI
         if ($link) {
             $this->link = $link;
         } else {
-            $scheme = self::defineScheme();
-            $host = self::defineHost();
+            $origin = self::defineOrigin();
             $path = self::definePath();
-            $port = self::defineServerPort();
 
-            $origin = $host . ($host == 'localhost' && strpos($host, $port) === false ? ':' . $port : '');
-
-            $this->link = $scheme . $origin . $path;
+            $this->link = $origin . $path;
         }
     }
 
@@ -54,7 +50,7 @@ class URI
 
     public function getPort()
     {
-        return $this->decompose()['port'] ?? self::defineServerPort();
+        return $this->decompose()['port'] ?? '';
     }
 
     public function getOrigin()
@@ -163,6 +159,21 @@ class URI
     public static function defineServerPort()
     {
         return $_SERVER['SERVER_PORT'];
+    }
+
+    public static function defineOrigin()
+    {
+        $scheme = self::defineScheme();
+        $host = self::defineHost();
+        $port = self::defineServerPort();
+
+        if ($host == 'localhost' && strpos($host, $port) === false) {
+            $port = ":$port";
+        } else {
+            $port = '';
+        }
+
+        return $scheme . $host . $port;
     }
 
     public static function congregateLink($path = '', $query = '', $scheme = null, $host = null, $port = null)
